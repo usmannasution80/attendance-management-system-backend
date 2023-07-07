@@ -12,9 +12,9 @@ return new class extends Migration {
     Schema::create('users', function (Blueprint $table) {
       $table->id();
       $table->string('name', 50);
-      $table->unsignedSmallInteger('grade');
-      $table->string('department', 10);
-      $table->unsignedTinyInteger('class');
+      $table->unsignedSmallInteger('grade')->nullable();
+      $table->string('department', 10)->nullable();
+      $table->unsignedTinyInteger('class')->nullable();
       $table->string('email')->unique()->nullable();
       $table->timestamp('email_verified_at')->nullable();
       $table->string('password')->nullable();
