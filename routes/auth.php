@@ -8,30 +8,35 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/register', [RegisteredUserController::class, 'store'])
-                ->middleware('guest')
-                ->name('register');
+Route::post('/api/register', [RegisteredUserController::class, 'store'])
+        ->middleware('guest')
+        ->name('register');
 
-Route::post('/login', [AuthenticatedSessionController::class, 'store'])
-                ->middleware('guest')
-                ->name('login');
+Route::post('/api/login', [AuthenticatedSessionController::class, 'store'])
+        ->middleware('guest')
+        ->name('login');
 
-Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-                ->middleware('guest')
-                ->name('password.email');
+Route::post('/api/forgot-password', [PasswordResetLinkController::class, 'store'])
+        ->middleware('guest')
+        ->name('password.email');
 
-Route::post('/reset-password', [NewPasswordController::class, 'store'])
-                ->middleware('guest')
-                ->name('password.store');
+Route::post('/api/reset-password', [NewPasswordController::class, 'store'])
+        ->middleware('guest')
+        ->name('password.store');
 
-Route::get('/verify-email/{id}/{hash}', VerifyEmailController::class)
-                ->middleware(['auth', 'signed', 'throttle:6,1'])
-                ->name('verification.verify');
+Route::get('/api/verify-email/{id}/{hash}', VerifyEmailController::class)
+        ->middleware(['auth', 'signed', 'throttle:6,1'])
+        ->name('verification.verify');
 
-Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-                ->middleware(['auth', 'throttle:6,1'])
-                ->name('verification.send');
+Route::post('/api/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+        ->middleware(['auth', 'throttle:6,1'])
+        ->name('verification.send');
 
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
-                ->middleware('auth')
-                ->name('logout');
+Route::post('/api/logout', [AuthenticatedSessionController::class, 'destroy'])
+        ->middleware('auth')
+        ->name('logout');
+Route::get('api/login-check', function(){
+  if(request()->user())
+    return response()->noContent();
+  abort(401);
+});
