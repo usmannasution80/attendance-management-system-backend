@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return ['Laravel' => app()->version()];
+});
+Route::prefix('api')->group(function(){
+
+  Route::prefix('user')->group(function(){
+
+    Route::get('{id}', [UserController::class, 'get']);
+
+  });
+
 });
 
 require __DIR__.'/auth.php';
