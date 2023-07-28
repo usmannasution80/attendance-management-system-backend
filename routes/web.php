@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AttendanceListController;
+use App\Http\Controllers\FileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,15 +15,33 @@ use App\Http\Controllers\UserController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\App;
 
-Route::get('/', function () {
-    return ['Laravel' => app()->version()];
-});
+Route::get('{path}', function(){
+  include(public_path().'/index.html');
+})->where('path', '^((?!api).)*$');
+
 Route::prefix('api')->group(function(){
 
   Route::prefix('user')->group(function(){
 
-    Route::get('{id}', [UserController::class, 'get']);
+    Route::get('/', [UserController::class, 'index']);
+    Route::get('index', [UserController::class, 'index']);
+    Route::post('update', [UserController::class, 'update'])
+      ->middleware('admin');
+    Route::get('download-cards', [UserController::class, 'download_cards']);
+    Route::get('{id}', [UserController::class, 'get'])
+      ->where('id', '[0-9]+');
+    Route::post('create', [UserController::class, 'create'])
+      ->middleware('admin');
+
+  });
+
+  Route::prefix('attendance')->group(function(){
+
+    Route::post('set', [AttendanceListController::class, 'set']);
+    Route::get('/list/{date}', [AttendanceListController::class, 'get']);
 
   });
 

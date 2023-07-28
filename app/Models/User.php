@@ -18,12 +18,12 @@ class User extends Authenticatable {
    * @var array<int, string>
    */
   protected $fillable = [
-    'name',
-    'email',
-    'grade',
-    'department',
-    'class',
-    'password',
+    'name'       ,
+    'email'      ,
+    'grade'      ,
+    'department' ,
+    'class'      ,
+    'password'   ,
   ];
 
   /**
@@ -32,8 +32,8 @@ class User extends Authenticatable {
    * @var array<int, string>
    */
   protected $hidden = [
-    'password',
-    'remember_token',
+    'password'       ,
+    'remember_token' ,
   ];
 
   /**
@@ -47,8 +47,8 @@ class User extends Authenticatable {
   ];
 
   protected $appends = [
-    'is_admin',
-    'is_teacher',
+    'is_admin'   ,
+    'is_teacher' ,
     'is_student'
   ];
 
