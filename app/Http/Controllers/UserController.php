@@ -84,6 +84,25 @@ class UserController extends Controller {
 
   }
 
+  public function delete($id){
+
+    User::destroy($id);
+
+    DB::table('attendance_lists')
+    ->update([
+      'data' => DB::raw(
+        "REGEXP_REPLACE(
+          data,
+          '{$id},[0-9]+,[^;]+;?',
+          ''
+        )"
+      )
+    ]);
+
+    return response()->noContent();
+
+  }
+
   public function download_cards(){
     $height = 40;
     $header_height = 15;

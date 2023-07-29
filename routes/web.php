@@ -35,6 +35,8 @@ Route::prefix('api')->group(function(){
       ->where('id', '[0-9]+');
     Route::post('create', [UserController::class, 'create'])
       ->middleware('admin');
+    Route::post('delete/{id}', [UserController::class, 'delete'])
+      ->middleware('admin');
 
   });
 
