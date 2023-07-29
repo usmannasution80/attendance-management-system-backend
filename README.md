@@ -1,4 +1,4 @@
-# Attendance Management System (Front-End)
+# Attendance Management System (Back-End)
 ## Overview
 This is a web based attendance management system application. It's for **back-end**. This application require a **front-end** which you can find in [Attendance Management System (Front-End)](https://github.com/usmannasution80/attendance-management-system-frontend). This application is powered by [Laravel](https://laravel.com/).
 ## Installation
