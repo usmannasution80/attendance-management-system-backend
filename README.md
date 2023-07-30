@@ -6,6 +6,7 @@ This is a web based attendance management system application. It's for **back-en
 - PHP >= 8.1
 - MySQL
 - NodeJS
+- Composer (PHP)
 - [Attendance Management System (Front-End)](https://github.com/usmannasution80/attendance-management-system-backend).
 ### Development
 If you want to run this application in development mode, you should  you should run the **back-end** at **port 8000** (it's default) and this **front-end** at **port 3000** (it's default).
