@@ -104,6 +104,7 @@ class UserController extends Controller {
   }
 
   public function download_cards(){
+    ini_set('max_execution_time', 2*60);
     $height = 40;
     $header_height = 15;
     $pdf = new Fpdf();
@@ -116,9 +117,12 @@ class UserController extends Controller {
     $qr_options = new QROptions();
     $qr_options->imageBase64 = false;
     $qr_options->outputType = 'png';
-    $qr_options->jpegQuality = 10;
+    $qr_options->jpegQuality = 1;
     $qr = new QRCode();
+    $i = 0;
     foreach($users as $user){
+      $i++;
+      //if($i >= 100)break;
 
       if($row * $height + $spacing * ($row + 1) + $height > $pdf->getPageHeight()){
         $pdf->AddPage();
