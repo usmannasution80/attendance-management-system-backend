@@ -39,5 +39,3 @@ If you want to run in the production mode, you can follow these steps :
 - Default admin for this application is :
   - Email : **ams_admin@gmail.com**
   - Password : **ams_admin**
-## Download Production Version
-[Attendance Management System.zip](https://drive.google.com/file/d/14AhBpwBVZdGLFOMb4vB-Dbmha8vlqWw5/view?usp=drivesdk)
