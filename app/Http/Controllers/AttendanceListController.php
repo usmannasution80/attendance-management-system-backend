@@ -23,7 +23,7 @@ class AttendanceListController extends Controller {
     $status  = $req->input('status');
     $implode = 'implode';
 
-    DB::table('attendance_lists')
+    $updated = DB::table('attendance_lists')
     ->whereRaw("created_at BETWEEN '{$date}' AND '{$date} 23:59:59'")
     ->update([
       'data' => DB::raw(
@@ -44,9 +44,9 @@ class AttendanceListController extends Controller {
       )
     ]);
 
-    DB::table('attendance_lists')
+    if(!$updated) DB::table('attendance_lists')
     ->whereRaw(
-      "exists(
+      "not exists(
         SELECT id
         FROM attendance_lists
         WHERE created_at BETWEEN '{$date}' AND '{$date} 23:59:59'
@@ -62,11 +62,11 @@ class AttendanceListController extends Controller {
       ),
 
       'created_at' => DB::raw(
-        'NOW()'
+        "'$date'"
       ),
 
       'updated_at' => DB::raw(
-        'NOW()'
+        "'$date'"
       )
 
     ]);
