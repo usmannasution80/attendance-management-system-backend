@@ -103,6 +103,82 @@ class UserController extends Controller {
 
   }
 
+  public function get_card($id){
+    $user = User::whereNotNull('department')->where('id', $id)->first();
+    if(!$user)
+      abort(404);
+    $img = imagecreatefrompng(public_path() . '/qr_bg.png');
+    $qr_options = new QROptions();
+    $qr_options->imageBase64 = false;
+    $qr_options->outputType = 'png';
+    $qr_options->jpegQuality = 1;
+    $qr = new QRCode();
+    $qr_options->cachefile = public_path()."/temp/qr_{$user['id']}.png";
+    (new QRCode($qr_options))->render($user->id);
+    $qr_wh = intval(imagesx($img) * 82 / 100);
+    $qr = imagecreatefrompng($qr_options->cachefile);
+    imagecopyresized(
+      $img,
+      $qr,
+      intval(imagesx($img) / 2 - $qr_wh / 2),
+      550,
+      0,
+      0,
+      $qr_wh,
+      $qr_wh,
+      imagesx($qr),
+      imagesy($qr)
+    );
+    $width = imagesx($img);
+    $center_x = $width / 2;
+    $font_size = 100;
+    $font = public_path() . '/Ubuntu-Bold.ttf';
+    $text = $user->name;
+    do{
+      $text = preg_replace('/\s\w+$/i', '', $text);
+      list($left, , $right, , ,) = imageftbbox($font_size, 0, $font, $text);
+    }while($right > $width);
+    $left_offset = ($right - $left) / 2;
+    $x = $center_x - $left_offset;
+    $imagettfstroketext = function(&$image, $size, $angle, $x, $y, $textcolor, $strokecolor, $fontfile, $text, $px) {
+      for($c1 = ($x-abs($px)); $c1 <= ($x+abs($px)); $c1++)
+        for($c2 = ($y-abs($px)); $c2 <= ($y+abs($px)); $c2++)
+            $bg = imagettftext($image, $size, $angle, $c1, $c2, $strokecolor, $fontfile, $text);
+      return imagettftext($image, $size, $angle, $x, $y, $textcolor, $fontfile, $text);
+    };
+    $imagettfstroketext(
+      $img,
+      $font_size,
+      0,
+      floor($center_x - $left_offset),
+      2300,
+      imagecolorallocate($img, 3, 169, 244),
+      imagecolorallocate($img, 255, 255, 255),
+      $font,
+      $text,
+      5
+    );
+    $text = $user->grade . ' ' . strtoupper($user->department) . '-' . $user->class;
+    list($left, , $right, , ,) = imageftbbox($font_size, 0, $font, $text);
+    $left_offset = ($right - $left) / 2;
+    $imagettfstroketext(
+      $img,
+      $font_size,
+      0,
+      floor($center_x - $left_offset),
+      2500,
+      imagecolorallocate($img, 0, 0, 0),
+      imagecolorallocate($img, 255, 255, 255),
+      $font,
+      $text,
+      5
+    );
+    header('Content-Disposition: inline; filename=qr.png');
+    header('Content-Type: image/png');
+
+    imagepng($img);
+  }
+
   public function download_cards(){
     ini_set('max_execution_time', 2*60);
     $height = 40;

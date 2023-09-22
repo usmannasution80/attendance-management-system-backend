@@ -31,6 +31,7 @@ Route::prefix('api')->group(function(){
     Route::post('update', [UserController::class, 'update'])
       ->middleware('admin');
     Route::get('download-cards', [UserController::class, 'download_cards']);
+    Route::get('card/{id}', [UserController::class, 'get_card']);
     Route::get('{id}', [UserController::class, 'get'])
       ->where('id', '[0-9]+');
     Route::post('create', [UserController::class, 'create'])
