@@ -104,7 +104,7 @@ class UserController extends Controller {
   }
 
   public function get_card($id){
-    $user = User::whereNotNull('department')->where('id', $id)->first();
+    $user = User::find($id);
     if(!$user)
       abort(404);
     $img = imagecreatefrompng(public_path() . '/qr_bg.png');
@@ -173,7 +173,7 @@ class UserController extends Controller {
       $text,
       5
     );
-    header('Content-Disposition: inline; filename=qr.png');
+    header('Content-Disposition: attachment; filename=qr_card_' . $id . '.png');
     header('Content-Type: image/png');
 
     imagepng($img);
