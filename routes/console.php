@@ -2,6 +2,8 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,5 +17,14 @@ use Illuminate\Support\Facades\Artisan;
 */
 
 Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
+  $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+Artisan::command('create_admin {name} {email} {password}', function($name, $email, $password){
+  $user = new User();
+  $user->name = $name;
+  $user->email = $email;
+  $user->password = Hash::make($password);
+  $user->save();
+  echo 'New admin created!';
+});
