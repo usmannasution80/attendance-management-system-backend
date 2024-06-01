@@ -3,7 +3,8 @@
 /public/build
 /public/hot
 /public/storage
-/public/temp
+/public/temp/*
+!/public/temp/.gitignore
 /public/*.pdf
 /storage/*.key
 /vendor
