@@ -198,7 +198,6 @@ class UserController extends Controller {
     $i = 0;
     foreach($users as $user){
       $i++;
-      //if($i >= 100)break;
 
       if($row * $height + $spacing * ($row + 1) + $height > $pdf->getPageHeight()){
         $pdf->AddPage();
