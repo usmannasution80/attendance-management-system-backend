@@ -103,7 +103,7 @@ class UserController extends Controller {
 
   }
 
-  public function create_card($user){
+  public function generate_card($user){
     if(!$user)
       abort(404);
     $img = imagecreatefrompng(public_path() . '/qr_bg.png');
@@ -175,12 +175,13 @@ class UserController extends Controller {
     header('Content-Disposition: attachment; filename=qr_card_' . $user->id . '.png');
     header('Content-Type: image/png');
 
-    imagepng($img);
+    imagepng($img, $qr_options->cachefile);
+    return readfile($qr_options->cachefile);
   }
 
   public function get_card($id){
     $user = User::find($id);
-    return $this->create_card($user);
+    return $this->generate_card($user);
   }
 
   public function download_cards(){
