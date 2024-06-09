@@ -172,16 +172,17 @@ class UserController extends Controller {
       $text,
       5
     );
-    header('Content-Disposition: attachment; filename=qr_card_' . $user->id . '.png');
-    header('Content-Type: image/png');
 
     imagepng($img, $qr_options->cachefile);
-    return readfile($qr_options->cachefile);
+    return $qr_options->cachefile;
+
   }
 
   public function get_card($id){
     $user = User::find($id);
-    return $this->generate_card($user);
+    header('Content-Disposition: attachment; filename=qr_card_' . $user->id . '.png');
+    header('Content-Type: image/png');
+    return readfile($this->generate_card($user));
   }
 
   public function download_cards(){
