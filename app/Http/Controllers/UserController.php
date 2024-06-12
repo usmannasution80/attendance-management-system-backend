@@ -189,7 +189,14 @@ class UserController extends Controller {
     ini_set('max_execution_time', 0);
     $pdf = new Fpdf();
     $pdf->AddPage();
-    $users = User::all();
+    $users = new User();
+    if(isset($_GET['grade']))
+      $users = $users->where('grade', $_GET['grade']);
+    if(isset($_GET['department']))
+      $users = $users->where('department', $_GET['department']);
+    if(isset($_GET['class']))
+      $users = $users->where('class', $_GET['class']);
+    $users = $users->get();
     $column = 1;
     $row    = 0;
     $spacing = 10;
