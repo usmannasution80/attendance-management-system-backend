@@ -220,6 +220,7 @@ class UserController extends Controller {
       $column *= -1;
     }
     $pdf->Output('I');
+    ini_set('max_execution_time', 30);
   }
 
 }
