@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Artisan;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Custom\Constants;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,29 +33,15 @@ Artisan::command('create_admin {name} {email} {password}', function($name, $emai
 
 Artisan::command('generate_random_users', function(){
   $departments = array_keys(Constants::DEPARTMENTS);
-  $grade = 10;
-  while($grade <= 12){
-    $sql = 'INSERT INTO '.env('DB_DATABASE', 'ams').'.users (name, grade, department, class) VALUES ';
-    foreach($departments as $department){
-      $count = 1;
-      while($count <= Constants::DEPARTMENTS[$department] * 35){
-        $class = ceil($count / 35);
-        $sql .= '('
-              . "'John $grade $department $class ___',"
-              . "'$grade',"
-              . "'$department',"
-              . "'$class'),";
-        $count++;
-      }
-    }
-    $sql = preg_replace('/,$/i', '', $sql);
-    $con = mysqli_connect(
-      env('DB_HOST'),
-      env('DB_USERNAME'),
-      env('DB_PASSWORD'),
-      env('DB_DATABASE')
-    );
-    mysqli_query($con, $sql);
-    $grade++;
-  }
+  User::factory()
+    ->count(1000)
+    ->state(new Sequence(
+      fn(Sequence $sequence) => [
+        'grade' => rand(10, 12),
+        'department' => $departments[rand(0, count($departments)-1)],
+        'class' => 1
+      ]
+    ))
+    ->create();
+  echo 'Users generated!';
 });
