@@ -103,19 +103,28 @@ class UserController extends Controller {
 
   }
 
-  public function generate_card($user){
+  public function generate_card($user, $force = false){
+
     if(!$user)
       abort(404);
-    $img = imagecreatefrompng(public_path() . '/qr_bg.png');
+
     $qr_options = new QROptions();
     $qr_options->imageBase64 = false;
     $qr_options->outputType = 'png';
     $qr_options->jpegQuality = 1;
-    $qr = new QRCode();
     $qr_options->cachefile = public_path()."/temp/qr_{$user['id']}.png";
+
+    if(!$force)
+      if(file_exists($qr_options->cachefile))
+        return $qr_options->cachefile;
+
+    $img = imagecreatefrompng(public_path() . '/qr_bg.png');
+    $qr = new QRCode();
+
     (new QRCode($qr_options))->render($user->id);
     $qr_wh = intval(imagesx($img) * 82 / 100);
     $qr = imagecreatefrompng($qr_options->cachefile);
+
     imagecopyresized(
       $img,
       $qr,
@@ -128,6 +137,7 @@ class UserController extends Controller {
       imagesx($qr),
       imagesy($qr)
     );
+
     $width = imagesx($img);
     $center_x = $width / 2;
     $font_size = 100;
@@ -145,6 +155,7 @@ class UserController extends Controller {
             $bg = imagettftext($image, $size, $angle, $c1, $c2, $strokecolor, $fontfile, $text);
       return imagettftext($image, $size, $angle, $x, $y, $textcolor, $fontfile, $text);
     };
+
     $imagettfstroketext(
       $img,
       $font_size,
@@ -157,9 +168,11 @@ class UserController extends Controller {
       $text,
       5
     );
+
     $text = $user->grade . ' ' . strtoupper($user->department) . '-' . $user->class;
     list($left, , $right, , ,) = imageftbbox($font_size, 0, $font, $text);
     $left_offset = ($right - $left) / 2;
+
     $imagettfstroketext(
       $img,
       $font_size,
