@@ -241,7 +241,9 @@ class UserController extends Controller {
         $row++;
       $column *= -1;
     }
-    $pdf->Output('I');
+    $doc = public_path() . '/temp/doc.pdf';
+    $pdf->Output('F', $doc);
+    return response()->download($doc);
     ini_set('max_execution_time', 30);
   }
 
