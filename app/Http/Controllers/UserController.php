@@ -196,6 +196,8 @@ class UserController extends Controller {
       $users = $users->where('department', $_GET['department']);
     if(isset($_GET['class']))
       $users = $users->where('class', $_GET['class']);
+    if(isset($_GET['name']))
+      $users = $users->where('name', 'like', "%${_GET['name']}%");
     $users = $users->get();
     $column = 1;
     $row    = 0;
