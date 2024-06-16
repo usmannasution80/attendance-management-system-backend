@@ -54,6 +54,7 @@ class UserController extends Controller {
       $user->password = Hash::make($user->email);
 
     $user->save();
+    $this->generate_card($user);
 
     return $user->toArray();
 
@@ -79,6 +80,7 @@ class UserController extends Controller {
       $user->password = null;
 
     $user->save();
+    $this->generate_card($user);
 
     return $user->toArray();
 
