@@ -8,6 +8,7 @@ use App\Custom\Constants;
 use Illuminate\Support\Facades\DB;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use chillerlan\QRCode\{QRCode, QROptions};
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller {
 
