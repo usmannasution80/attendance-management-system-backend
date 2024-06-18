@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Custom\Constants;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,4 +45,13 @@ Artisan::command('generate_random_users', function(){
     ))
     ->create();
   echo 'Users generated!';
+});
+Artisan::command('generate_user_cards', function(){
+  $users = User::all();
+  $i = 0;
+  foreach($users as $user){
+    echo '['.(++$i)."] Generate card for ${user['name']} ...\n\n";
+    (new UserController())->generate_card($user);
+  }
+  echo 'Cards generated!';
 });
