@@ -70,4 +70,8 @@ class User extends Authenticatable {
     );
   }
 
+  public static function get_table(){
+    return (new User())->getTable();
+  }
+
 }

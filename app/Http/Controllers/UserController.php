@@ -205,7 +205,7 @@ class UserController extends Controller {
     ini_set('max_execution_time', 0);
     $pdf = new Fpdf();
     $pdf->AddPage();
-    $users = new User();
+    $users = DB::table(User::get_table());
     if(isset($_GET['grade']))
       $users = $users->where('grade', $_GET['grade']);
     if(isset($_GET['department']))
@@ -219,7 +219,7 @@ class UserController extends Controller {
     $row    = 0;
     $spacing = 10;
     foreach($users as $user){
-      $qr = $this->generate_card($user);
+      $qr = $this->generate_card(json_decode(json_encode($user), true));
       list($img_width, $img_height) = getimagesize($qr);
 
       $width = $pdf->getPageWidth() / 2 - $spacing * 1.5;
